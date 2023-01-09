@@ -13,7 +13,7 @@ sqlcipher = ["mentat/sqlcipher"]
 bundled_sqlite3 = ["mentat/bundled_sqlite3"]
 
 [dependencies]
-libc = "~0.2"
+libc = "^0.2"
 
 [dependencies.mentat]
 path = "../"

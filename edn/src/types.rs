@@ -18,7 +18,7 @@ use std::fmt::{Display, Formatter};
 use chrono::{
     DateTime,
     SecondsFormat,
-    TimeZone, // For Utc::timestamp. The compiler incorrectly complains that this is unused.
+    TimeZone,
     Utc,
 };
 use num::BigInt;
@@ -569,7 +569,7 @@ macro_rules! def_common_value_display {
             }
             // TODO: EDN escaping.
             $t::Text(ref v) => write!($f, "\"{}\"", v),
-            $t::Uuid(ref u) => write!($f, "#uuid \"{}\"", u.to_hyphenated().to_string()),
+            $t::Uuid(ref u) => write!($f, "#uuid \"{}\"", u.as_hyphenated().to_string()),
             $t::PlainSymbol(ref v) => v.fmt($f),
             $t::NamespacedSymbol(ref v) => v.fmt($f),
             $t::Keyword(ref v) => v.fmt($f),
@@ -668,7 +668,7 @@ pub trait FromMicros {
 
 impl FromMicros for DateTime<Utc> {
     fn from_micros(ts: i64) -> Self {
-        Utc.timestamp(ts / 1_000_000, ((ts % 1_000_000).abs() as u32) * 1_000)
+        Utc.timestamp_opt(ts / 1_000_000, ((ts % 1_000_000).abs() as u32) * 1_000).unwrap()
     }
 }
 
@@ -690,7 +690,7 @@ pub trait FromMillis {
 
 impl FromMillis for DateTime<Utc> {
     fn from_millis(ts: i64) -> Self {
-        Utc.timestamp(ts / 1_000, ((ts % 1_000).abs() as u32) * 1_000)
+        Utc.timestamp_millis_opt(ts).unwrap()
     }
 }
 
